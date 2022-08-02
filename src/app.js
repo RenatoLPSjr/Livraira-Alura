@@ -1,6 +1,7 @@
 import express from "express";
 import db from "./config/dbconnect.js"
 import livros from "./models/Livro.js"
+import routes from "./routes/index.js"
 
 db.on("error", console.log.bind(console, 'Erro de conexão'))
 db.once("open", () => {
@@ -11,17 +12,7 @@ const app = express();
 
 app.use(express.json())
 
-
-
-app.get('/', (req, res) => {
-    res.status(200).send('Curso de Node');
-}) 
-
-app.get('/livros', (req, res) => {
-    livros.find((err, livros) => {
-        res.status(200).json(livros);
-    })
-}) 
+routes(app);
 
 app.get('/livros/:id', (req, res) =>{
     let index = buscaLivro(req.params.id);
@@ -49,5 +40,7 @@ app.delete('/livros/:id', (req, res) =>{
     livros.splice(index, 1);
     res.send(`Livro ${id} removido com sucesso`)
 })
+
+
 
 export default app 
